@@ -1513,7 +1513,7 @@ window.addEventListener("load", function () {
   let x = new Puzzle({
     img: img,
     width: window.innerWidth ,
-    height: window.innerHeight,
+    height: window.innerHeight ,
     idiv: "forPuzzle",
   });
 

@@ -1,4 +1,4 @@
-package com.puzzle_game
+package com.jigsaw_puzzle_gamer
 
 import android.app.Application
 import com.facebook.react.PackageList

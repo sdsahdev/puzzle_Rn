@@ -1,4 +1,4 @@
-package com.puzzle_game
+package com.jigsaw_puzzle_gamer
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

@@ -7,11 +7,17 @@ const App = () => {
 
   const [bannerinfo, setbannerinfo] = useState({})
   const [rewadadsinfo, setrewadadsinfo] = useState({})
-  const reward_Id = __DEV__ ? TestIds.REWARDED : bannerinfo.id;
-  const banner_id = __DEV__ ? TestIds.BANNER : rewadadsinfo.id;
-
-  const rewarded = RewardedAd.createForAdRequest(reward_Id, {
-  });
+  const reward_Id = __DEV__ ? TestIds.REWARDED : !rewadadsinfo.id ? TestIds.REWARDED : rewadadsinfo.id;
+  const banner_id = __DEV__ ? TestIds.BANNER : !bannerinfo.id ? TestIds.BANNER : bannerinfo.id;;
+  console.log(reward_Id, "====rewad");
+  console.log(banner_id, "====banner_id");
+  const adConfig = {
+    requestConfiguration: {
+      tagForChildDirectedTreatment: true, // Set to true if your app is child-directed
+      maxAdContentRating: 'G', // Set your desired max ad content rating
+    },
+  };
+  const rewarded = RewardedAd.createForAdRequest(reward_Id, adConfig);
 
   const getDatadfromapi = () => {
     fetch(
@@ -19,7 +25,6 @@ const App = () => {
     )
       .then(res => res.json())
       .then(res => {
-        console.log(res.values[2], '==here data');
         const objects = res.values?.map(innerArray => {
           const obj = {};
           for (let i = 0; i < innerArray.length; i += 2) {
@@ -27,19 +32,17 @@ const App = () => {
           }
           return obj;
         });
-        console.log(objects);
         setbannerinfo(objects?.find(i => i["Ad Type"] == "banner_ad"))
         setrewadadsinfo(objects?.find(i => i["Ad Type"] == "reward_ad"))
-      
+
       })
       .catch(err => {
         console.log(err, '==here data');
       });
   };
-  
+
   rewarded.addAdEventListener(AdEventType.CLOSED,
     s => {
-      console.log("close");
       try {
         rewarded.load()
       }
@@ -50,7 +53,8 @@ const App = () => {
     })
 
   useEffect(() => {
-
+    console.log(reward_Id);
+    console.log(banner_id);
     try {
       getDatadfromapi()
       rewarded.load()
@@ -64,7 +68,7 @@ const App = () => {
 
   useEffect(() => {
     const adTimer = setInterval(() => {
-      console.log(rewarded._loaded, "time");
+
       if (rewarded._loaded) {
         rewarded.show()
       } else {
@@ -77,7 +81,7 @@ const App = () => {
           console.error('Failed to load rewarded ad:', error);
         }
       }
-    }, 1 * 30 * 1000 ); // Load ad every 4 minutes
+    }, 5 * 30 * 1000); // Load ad every 4 minutes
     // Clean up the interval when the component unmounts
     return () => clearInterval(adTimer);
   }, []);
@@ -85,9 +89,7 @@ const App = () => {
 
   return (
     <View style={{ flex: 1 }} >
-
       <WebView
-        style={{ flex: 1, height: '100%', width: '100%' }}
         scalesPageToFit
         originWhitelist={["*"]}
         source={{
@@ -97,6 +99,7 @@ const App = () => {
         <BannerAd
           unitId={banner_id}
           size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+          requestOptions={adConfig}
         />
       }
     </View>
