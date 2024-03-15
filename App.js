@@ -7,10 +7,9 @@ const App = () => {
 
   const [bannerinfo, setbannerinfo] = useState({})
   const [rewadadsinfo, setrewadadsinfo] = useState({})
-  const reward_Id = __DEV__ ? TestIds.REWARDED : !rewadadsinfo.id ? TestIds.REWARDED : rewadadsinfo.id;
-  const banner_id = __DEV__ ? TestIds.BANNER : !bannerinfo.id ? TestIds.BANNER : bannerinfo.id;;
-  console.log(reward_Id, "====rewad");
-  console.log(banner_id, "====banner_id");
+  let reward_Id = __DEV__ ? TestIds.REWARDED : !rewadadsinfo.id ? TestIds.REWARDED : rewadadsinfo.id;
+  let banner_id = __DEV__ ? TestIds.BANNER : !bannerinfo.id ? TestIds.BANNER : bannerinfo.id;;
+
   const adConfig = {
     requestConfiguration: {
       tagForChildDirectedTreatment: true, // Set to true if your app is child-directed
@@ -32,8 +31,17 @@ const App = () => {
           }
           return obj;
         });
+
         setbannerinfo(objects?.find(i => i["Ad Type"] == "banner_ad"))
         setrewadadsinfo(objects?.find(i => i["Ad Type"] == "reward_ad"))
+
+        banner_id = objects?.find(i => i["Ad Type"] == "banner_ad")?.id
+        reward_Id = objects?.find(i => i["Ad Type"] == "banner_ad")?.id
+
+
+
+        console.log(banner_id, "=====adssbanner_id");
+        console.log(reward_Id, "=====adssreward_Id");
 
       })
       .catch(err => {
@@ -81,7 +89,7 @@ const App = () => {
           console.error('Failed to load rewarded ad:', error);
         }
       }
-    }, 5 * 30 * 1000); // Load ad every 4 minutes
+    }, 4 * 60 * 1000); // Load ad every 4 minutes
     // Clean up the interval when the component unmounts
     return () => clearInterval(adTimer);
   }, []);

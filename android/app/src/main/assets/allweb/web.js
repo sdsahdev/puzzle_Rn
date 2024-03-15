@@ -1507,7 +1507,8 @@ function lookForLoops(tbCases) {
 window.addEventListener("load", function () {
 
   // let img = 'https://assets.codepen.io/2574552/Mona_Lisa.jpg';
-  let img = 'https://wallpapercave.com/wp/wp7406049.png';
+  // let img = 'https://wallpapercave.com/wp/wp7406049.png';
+  let img = 'https://picsum.photos/700';
   autoStart = isMiniature(); // used for nice miniature in CodePen
 
   let x = new Puzzle({
